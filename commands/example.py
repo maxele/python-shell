@@ -14,5 +14,5 @@ commands = {
     }
 }
 
-def getcommands():
+def get_commands():
     return commands

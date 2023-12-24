@@ -7,8 +7,8 @@ Not the cleanest code, but should be usable as a refrence or even to use as is.
 
 ## Usage
 
-Put the commands you want to use in the `get_commands` function at the top of
-the `shell.py` file.
+Put the commands you want to use in the `get_commands` function in the
+`commands/__init__.py` file.
 
 the commands dictionary has to have the following layout:
 ```Python

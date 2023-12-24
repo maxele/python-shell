@@ -1,12 +1,6 @@
 import keyboard
 import sys, tty, termios
-
-def get_commands():
-    cmds = {}
-    import commands.example
-    # TODO: Check if command is alaready defined
-    cmds.update(commands.example.getcommands())
-    return cmds
+import commands
 
 conv = { 1: 'Ctrl-A', 2: 'Ctrl-B', 3: 'Ctrl-C', 4: 'Ctrl-D', 5: 'Ctrl-E', 6:
         'Ctrl-F', 7: 'Ctrl-G', 8: 'Ctrl-H', 9: 'Ctrl-I', 10: 'Ctrl-J', 11:
@@ -94,7 +88,7 @@ def shell(v = False):
             'desc': 'Print help for all commands',
         }
     }
-    cmds.update(get_commands())
+    cmds.update(commands.get_commands())
 
     keybinds = {
             reverse_conv['Return']: 'Submit',
