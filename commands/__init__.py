@@ -1,6 +1,6 @@
 def get_commands():
     cmds = {}
-    import example
+    import commands.example
     # TODO: Check if command is alaready defined
-    cmds.update(example.get_commands())
+    cmds.update(commands.example.get_commands())
     return cmds
