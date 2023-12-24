@@ -73,11 +73,13 @@ def complete(s, cmds, cmd):
                 ls = overlap(ls, i)
                 similarcount += 1
     if ls == None: return s
-    elif ls == s and similarcount >= 1:
+    elif ls == s and similarcount > 0:
         print()
         for cmd in cmds:
             if cmd.startswith(s):
                 print(cmd)
+    elif similarcount == 0:
+        return ls + ' '
     return ls
 
 def shell(v = False):
