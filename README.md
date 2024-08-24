@@ -7,22 +7,20 @@ Not the cleanest code, but should be usable as a refrence or even to use as is.
 
 ## Usage
 
-Put the commands you want to use in the `get_commands` function in the
-`commands/__init__.py` file.
-
-the commands dictionary has to have the following layout:
+Put the modules you want to use in the `commands` directory.
+Each module should implement a `get_commands()` function which should return a dict of the form:
 ```Python
-def test(args):
-    print("TEST:", args)
-
 commands = {
-    'test': {
-        'func': test,
-        'params': ['completion1', 'command2'],
-        'desc': 'Function used for testing',
-    },
+    'desc': <description>,
+    'cmds': {
+        'test': {
+            'func': <function>,
+            'params': <list_with_completions>,
+            'desc': <description>,
+        },
+    }
 }
 ```
-- 'func' is the function which is called with the arguments.
-- 'params' are the possible values which can come after `test`.
-- 'desc' is a small description for the `help` command.
+- `<desctiption>` is a string which describes the module/command
+- `<list_with_completions>` a list with word suggestions
+- `<function>` a funtion which takes an single argument which contains the list of arguments

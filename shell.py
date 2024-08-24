@@ -1,4 +1,3 @@
-import keyboard
 import sys, tty, termios
 import commands
 
@@ -25,16 +24,11 @@ def getch():
 
 def eline(l, cmds):
     cmd = l.strip().split(' ')
-    if cmd[0] == 'help':
-        print()
-        for cmd in cmds:
-            print(f"{cmd:16s} {cmds[cmd]['desc']}")
-    elif cmd[0] in cmds:
+    if cmd[0] in cmds:
         print()
         cmds[cmd[0]]['func'](cmd[1:])
     else:
         print('\nUNKNOWN INPUT:', l)
-    #print('\nBAZAAR_SCRIPT:', bazaar_script(l))
 
 def get_escaped_sequence():
     c = getch()
@@ -82,15 +76,40 @@ def complete(s, cmds, cmd):
         return ls + ' '
     return ls
 
+def help(modules, args):
+    def printhelp(cmd, desc):
+              print(f'    {cmd:16s} {desc}')
+    if len(args) == 0:
+        print("To see more help about a module use 'help <module_name>'")
+        print("List of modules:")
+        for module in modules:
+              printhelp(module, modules[module]['desc'])
+    elif len(args) == 1:
+        if args[0] not in modules:
+            print("No such module")
+            return
+        print(f'List of commands defined in {args[0]}:')
+        for cmd in modules[args[0]]['cmds']:
+            printhelp(cmd, modules[args[0]]['cmds'][cmd]['desc'])
+
 def shell(v = False):
-    cmds = {
-        'help': {
-            'func': None,
-            'complete': None,
-            'desc': 'Print help for all commands',
+    modules = {
+        'builtin': {
+            'desc': 'the builtin functions',
+            'cmds': {
+                'help': {
+                    'func': lambda line: help(modules, line),
+                    'params': [],
+                    'desc': 'Print help for all commands',
+                }
+            }
         }
     }
-    cmds.update(commands.get_commands())
+    modules.update(commands.get_commands())
+    modules['builtin']['cmds']['help']['params'] = [m for m in modules]
+    cmds = {}
+    for module in modules:
+        cmds.update(modules[module]['cmds'])
 
     keybinds = {
             reverse_conv['Return']: 'Submit',
@@ -132,7 +151,6 @@ def shell(v = False):
             c = get_escaped_sequence()
 
         if c in keybinds:
-            #print(keybinds[c])
             match keybinds[c]:
                 case 'Exit':
                     print()
@@ -156,7 +174,6 @@ def shell(v = False):
                     if buf[:i].strip() != '':
                         cmd = buf.strip().split(' ')[0].strip()
                     compl = complete(buf[i:cursor], cmds, cmd)
-                    #print(buf[i:cursor], compl)
                     cursor += len(compl) - (cursor-i)
                     buf = buf[:i] + compl + buf[cursor:]
                 case 'Clear':
